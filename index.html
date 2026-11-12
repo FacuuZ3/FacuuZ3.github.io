@@ -413,11 +413,12 @@
       100% { box-shadow: 0 0 0 9px rgba(61, 220, 132, 0); }
     }
   }
+  @media print { .js .reveal, .js .figure.reveal .stackflow > * { opacity: 1; } }
 </style>
 </head>
 <body>
 <script>
-  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('js'); }
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('js'); }
 </script>
 <header class="site-head band">
   <div class="wrap head-row">
@@ -667,12 +668,21 @@
     });
 
     if (document.documentElement.classList.contains('js')) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      var pending = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+      var check = function () {
+        var limit = window.innerHeight * 0.92;
+        pending = pending.filter(function (el) {
+          if (el.getBoundingClientRect().top < limit) { el.classList.add('in'); return false; }
+          return true;
         });
-      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-      document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+        if (!pending.length) {
+          window.removeEventListener('scroll', check);
+          window.removeEventListener('resize', check);
+        }
+      };
+      window.addEventListener('scroll', check, { passive: true });
+      window.addEventListener('resize', check);
+      check();
     }
   })();
 </script>
