@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Facundo Ferreyra</title>
+<meta name="description" content="Desarrollador full-stack en Reconquista, Santa Fe. Aplicaciones web a medida con Next.js, TypeScript y PostgreSQL.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: one left-aligned column; asymmetric hero (claim left, portrait + status right);
+     each project is a full-width row of text beside a drawn diagram of how it works. */
+  :root {
+    --bg: #f3f6f8;          /* cool paper, biased toward the court blue */
+    --surface: #ffffff;
+    --ink: #121a24;
+    --muted: #556272;
+    --rule: #d5dde6;
+    --accent: #1f56b8;      /* pádel court blue */
+    --accent-soft: #e3ebf9;
+    --ball: #d6ef3d;        /* ball yellow: one small accent */
+    --ball-ink: #2a3300;
+    --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0c121b; --surface: #131b27; --ink: #e5ebf3; --muted: #95a3b5; --rule: #263244;
+      --accent: #86aaf7; --accent-soft: #1a2740; --ball: #d6ef3d; --ball-ink: #2a3300;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0c121b; --surface: #131b27; --ink: #e5ebf3; --muted: #95a3b5; --rule: #263244;
+    --accent: #86aaf7; --accent-soft: #1a2740; --ball: #d6ef3d; --ball-ink: #2a3300;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 1.0625rem/1.6 var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  a { color: var(--accent); text-underline-offset: 0.18em; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+  p { margin: 0; text-wrap: pretty; }
+  .label {
+    font: 500 0.75rem/1.2 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Top bar */
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-block: 1.25rem; }
+  .brand { font: 700 1rem/1 var(--font-display); color: var(--ink); text-decoration: none; }
+  .top nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+  .top nav a { color: var(--muted); text-decoration: none; font-size: 0.95rem; }
+  .top nav a:hover { color: var(--ink); }
+
+  /* Hero */
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: end;
+    padding-block: clamp(2.5rem, 7vw, 5.5rem) clamp(2.5rem, 6vw, 4.5rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero h1 {
+    font-weight: 700;
+    font-size: clamp(2.4rem, 6.2vw, 4.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    margin-top: 1rem;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .lead { margin-top: 1.5rem; max-width: 34rem; font-size: 1.15rem; color: var(--muted); }
+  .actions { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.7rem 1.15rem;
+    border-radius: 999px;
+    font: 600 0.95rem/1 var(--font-body);
+    text-decoration: none;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    background: var(--surface);
+    cursor: pointer;
+  }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .btn:hover { border-color: var(--accent); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    padding: 1.25rem;
+    display: grid;
+    gap: 1rem;
+  }
+  .who { display: flex; gap: 1rem; align-items: center; }
+  .who img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex: none; }
+  .who strong { display: block; font-family: var(--font-display); font-size: 1.15rem; }
+  .who span { color: var(--muted); font-size: 0.95rem; }
+  .facts { margin: 0; display: grid; gap: 0.55rem; font-size: 0.95rem; }
+  .facts div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 0.75rem; border-top: 1px solid var(--rule); padding-top: 0.55rem; }
+  .facts dt { color: var(--muted); }
+  .facts dd { margin: 0; }
+  .status { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .status::before { content: ""; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--ball); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ball) 30%, transparent); }
+
+  /* Sections */
+  section { padding-block: clamp(3rem, 7vw, 5rem); }
+  section + section { border-top: 1px solid var(--rule); }
+  .section-head { display: grid; gap: 0.6rem; margin-bottom: 2.5rem; align-content: start; }
+  .section-head h2 { font-size: clamp(1.8rem, 3.6vw, 2.5rem); letter-spacing: -0.025em; line-height: 1.1; }
+
+  /* Projects */
+  .projects { display: grid; gap: clamp(2.5rem, 5vw, 4rem); }
+  .project {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+  .project-text { display: grid; gap: 1rem; }
+  .project h3 { font-size: clamp(1.45rem, 2.6vw, 1.85rem); letter-spacing: -0.02em; line-height: 1.15; }
+  .meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
+  .project ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.35rem; }
+  .project li::marker { color: var(--accent); }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .chip {
+    font: 500 0.78rem/1 var(--font-mono);
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    background: var(--accent-soft);
+    color: var(--ink);
+  }
+  .note { font-size: 0.9rem; color: var(--muted); }
+
+  figure { margin: 0; }
+  .figure {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+    display: grid;
+    gap: 1rem;
+  }
+  figcaption { font-size: 0.85rem; color: var(--muted); }
+
+  /* Layered request flow (salon system) */
+  .layers { display: grid; gap: 0; }
+  .layer {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    background: var(--bg);
+  }
+  .layer b { font: 500 0.85rem/1.3 var(--font-mono); color: var(--accent); }
+  .layer span { font-size: 0.92rem; }
+  .layer.db { background: var(--accent-soft); border-color: transparent; }
+  .arrow { height: 1.1rem; margin-left: 4.6rem; border-left: 2px solid var(--rule); position: relative; }
+  .arrow::after {
+    content: ""; position: absolute; left: -6px; bottom: -1px;
+    border: 5px solid transparent; border-top: 6px solid var(--rule);
+  }
+
+  /* Court booking grid (Pádel Turnos) */
+  .courts { overflow-x: auto; }
+  .grid {
+    display: grid;
+    grid-template-columns: 4.6rem repeat(7, minmax(2.6rem, 1fr));
+    gap: 4px;
+    min-width: 25rem;
+    font: 500 0.74rem/1 var(--font-mono);
+  }
+  .grid .h { color: var(--muted); text-align: center; padding-bottom: 0.35rem; }
+  .grid .c { color: var(--muted); display: flex; align-items: center; }
+  .slot { height: 2.1rem; border-radius: 6px; background: var(--bg); border: 1px solid var(--rule); }
+  .slot.taken { background: var(--accent); border-color: var(--accent); }
+  .slot.pick { background: var(--ball); border-color: var(--ball); display: grid; place-items: center; color: var(--ball-ink); font-weight: 500; }
+  .legend { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.82rem; color: var(--muted); }
+  .legend i { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 3px; vertical-align: -0.1rem; margin-right: 0.35rem; border: 1px solid var(--rule); background: var(--bg); }
+  .legend i.t { background: var(--accent); border-color: var(--accent); }
+  .legend i.p { background: var(--ball); border-color: var(--ball); }
+
+  /* Stack */
+  .stack { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+  .stack div { border-top: 2px solid var(--ink); padding-top: 0.9rem; display: grid; gap: 0.5rem; align-content: start; }
+  .stack p { font-size: 0.98rem; }
+
+  /* About */
+  .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: clamp(1.5rem, 5vw, 4rem); }
+  .about-text { display: grid; gap: 1rem; max-width: 38rem; }
+  .timeline { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
+  .timeline li { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; padding-block: 0.85rem; border-top: 1px solid var(--rule); }
+  .timeline time { font: 500 0.85rem/1.5 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .timeline strong { display: block; font-weight: 600; }
+  .timeline span { color: var(--muted); font-size: 0.95rem; }
+
+  /* Contact */
+  .contact { display: grid; gap: 1.5rem; }
+  .contact h2 { font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -0.03em; line-height: 1.05; max-width: 20ch; }
+  .mail { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+  .mail code { font: 500 clamp(1rem, 2.4vw, 1.3rem)/1.3 var(--font-mono); user-select: all; overflow-wrap: anywhere; }
+  .links { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  footer { padding-block: 2rem 2.5rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.9rem; }
+
+  @media (max-width: 860px) {
+    .hero, .project, .about { grid-template-columns: minmax(0, 1fr); }
+    .hero { align-items: start; }
+    .stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 480px) {
+    .stack { grid-template-columns: minmax(0, 1fr); }
+    .top nav { display: none; }
+    .layer { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; }
+    .arrow { margin-left: 1.5rem; }
+    .timeline li { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .btn { transition: border-color 0.15s ease, transform 0.15s ease; }
+    .btn:hover { transform: translateY(-1px); }
+  }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#inicio">Facundo Ferreyra</a>
+    <nav aria-label="Secciones">
+      <a href="#proyectos">Proyectos</a>
+      <a href="#stack">Stack</a>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main id="inicio">
+    <div class="hero">
+      <div>
+        <p class="label">Desarrollador full-stack · Reconquista, Santa Fe</p>
+        <h1>Sistemas web para negocios: <em>turnos, ventas, stock</em> y paneles de gestión.</h1>
+        <p class="lead">Desarrollo aplicaciones a medida con Next.js, TypeScript y PostgreSQL. Arranco por entender cómo trabaja el negocio y termino con el sistema funcionando en producción.</p>
+        <div class="actions">
+          <a class="btn primary" href="#contacto">Contactame</a>
+          <a class="btn" href="#proyectos">Ver proyectos</a>
+        </div>
+      </div>
+      <aside class="card" aria-label="Datos rápidos">
+        <div class="who">
+          <img src="https://github.com/FacuuZ3.png?size=160" alt="Facundo Ferreyra" width="72" height="72">
+          <div><strong>Facundo Ferreyra</strong><span>Técnico Universitario en Programación</span></div>
+        </div>
+        <dl class="facts">
+          <div><dt>Disponible</dt><dd><span class="status">Proyectos freelance y remoto</span></dd></div>
+          <div><dt>Stack</dt><dd>Next.js, TypeScript, PostgreSQL, Prisma</dd></div>
+          <div><dt>Formación</dt><dd>UTN Facultad Regional Reconquista</dd></div>
+          <div><dt>Idiomas</dt><dd>Español nativo · Inglés técnico</dd></div>
+        </dl>
+      </aside>
+    </div>
+
+    <section id="proyectos" aria-labelledby="t-proyectos">
+      <div class="section-head">
+        <p class="label">Proyectos</p>
+        <h2 id="t-proyectos">Lo que construí</h2>
+      </div>
+
+      <div class="projects">
+        <article class="project">
+          <div class="project-text">
+            <div class="meta"><span class="label">Cliente real</span><span class="label">Ago 2025 – hoy</span></div>
+            <h3>Sistema de gestión para una peluquería</h3>
+            <p>Un sitio público con el catálogo de servicios y un back-office donde el negocio registra ventas, controla stock y carga gastos.</p>
+            <ul>
+              <li>Relevamiento de requerimientos en entrevistas con la clienta.</li>
+              <li>Arquitectura en capas, validación con Zod y tests automatizados.</li>
+              <li>Próxima etapa: facturación electrónica, cobros con Mercado Pago y avisos por WhatsApp.</li>
+            </ul>
+            <div class="chips" aria-label="Tecnologías">
+              <span class="chip">Next.js</span><span class="chip">TypeScript</span><span class="chip">PostgreSQL</span><span class="chip">Prisma</span><span class="chip">Auth.js</span><span class="chip">TanStack Query</span><span class="chip">Tailwind CSS</span><span class="chip">Vercel</span>
+            </div>
+            <p class="note">El código es del cliente, así que no es público.</p>
+          </div>
+          <figure class="figure">
+            <p class="label">Cómo viaja un pedido</p>
+            <div class="layers" role="img" aria-label="Flujo: route handler, service, repository, PostgreSQL">
+              <div class="layer"><b>Route handler</b><span>Recibe el pedido y valida los datos con Zod</span></div>
+              <div class="arrow" aria-hidden="true"></div>
+              <div class="layer"><b>Service</b><span>Aplica las reglas del negocio: precios, stock, pagos</span></div>
+              <div class="arrow" aria-hidden="true"></div>
+              <div class="layer"><b>Repository</b><span>Lee y escribe con Prisma, sin lógica de negocio</span></div>
+              <div class="arrow" aria-hidden="true"></div>
+              <div class="layer db"><b>PostgreSQL</b><span>Ventas, productos, stock y gastos</span></div>
+            </div>
+            <figcaption>Cada capa tiene una sola responsabilidad, así los cambios no rompen el resto y cada parte se puede testear por separado.</figcaption>
+          </figure>
+        </article>
+
+        <article class="project">
+          <div class="project-text">
+            <div class="meta"><span class="label">Proyecto final · UTN</span><span class="label">2026</span></div>
+            <h3>Pádel Turnos</h3>
+            <p>Plataforma web para gestionar las reservas de un complejo de pádel. Fue mi proyecto final de la Tecnicatura Universitaria en Programación.</p>
+            <ul>
+              <li>Registro de usuarios con verificación por email y autenticación con JWT.</li>
+              <li>Calendario de canchas disponibles y reserva de turnos en línea.</li>
+              <li>Control de concurrencia transaccional para que dos personas no reserven el mismo turno.</li>
+              <li>Panel de administración de canchas, turnos y disponibilidad, con avisos automáticos por email.</li>
+            </ul>
+            <div class="chips" aria-label="Tecnologías">
+              <span class="chip">Next.js 14</span><span class="chip">NestJS</span><span class="chip">TypeScript</span><span class="chip">PostgreSQL</span><span class="chip">Prisma</span><span class="chip">Passport JWT</span><span class="chip">TanStack Query</span><span class="chip">shadcn/ui</span><span class="chip">Docker</span>
+            </div>
+            <p class="note">Monorepo con el backend en NestJS y el frontend en Next.js, cada uno desplegable por separado.</p>
+            <p><a href="https://github.com/FacuuZ3/GestionTurnos" target="_blank" rel="noopener">Ver el código en GitHub</a></p>
+          </div>
+          <figure class="figure">
+            <p class="label">Grilla de turnos</p>
+            <div class="courts">
+              <div class="grid" role="img" aria-label="Ejemplo de grilla: tres canchas con turnos de 17 a 23 horas, algunos reservados y uno elegido">
+                <span></span><span class="h">17</span><span class="h">18</span><span class="h">19</span><span class="h">20</span><span class="h">21</span><span class="h">22</span><span class="h">23</span>
+                <span class="c">Cancha 1</span><span class="slot"></span><span class="slot taken"></span><span class="slot taken"></span><span class="slot"></span><span class="slot taken"></span><span class="slot taken"></span><span class="slot"></span>
+                <span class="c">Cancha 2</span><span class="slot"></span><span class="slot"></span><span class="slot taken"></span><span class="slot pick">20:00</span><span class="slot taken"></span><span class="slot"></span><span class="slot"></span>
+                <span class="c">Cancha 3</span><span class="slot taken"></span><span class="slot"></span><span class="slot"></span><span class="slot taken"></span><span class="slot taken"></span><span class="slot taken"></span><span class="slot"></span>
+              </div>
+            </div>
+            <div class="legend"><span><i></i>Libre</span><span><i class="t"></i>Reservado</span><span><i class="p"></i>Tu turno</span></div>
+            <figcaption>Ilustración de cómo se ve la disponibilidad: cada celda es una hora de una cancha.</figcaption>
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    <section id="stack" aria-labelledby="t-stack">
+      <div class="section-head">
+        <p class="label">Stack</p>
+        <h2 id="t-stack">Con qué trabajo</h2>
+      </div>
+      <div class="stack">
+        <div><p class="label">Frontend</p><p>Next.js (App Router), React, Tailwind CSS, shadcn/ui, TanStack Query, React Hook Form</p></div>
+        <div><p class="label">Backend y datos</p><p>NestJS, PostgreSQL, Prisma, Auth.js, Passport JWT, Zod</p></div>
+        <div><p class="label">Lenguajes</p><p>TypeScript, JavaScript, SQL. Nivel académico: C#, Java, C++</p></div>
+        <div><p class="label">Herramientas</p><p>Git, GitHub Actions, Docker, Vercel</p></div>
+      </div>
+    </section>
+
+    <section id="sobre-mi" aria-labelledby="t-sobre">
+      <div class="about">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="label">Sobre mí</p>
+          <h2 id="t-sobre">Programo y también atiendo un mostrador</h2>
+        </div>
+        <div class="about-text">
+          <p>Soy Técnico Universitario en Programación por la UTN Facultad Regional Reconquista. Desarrollo aplicaciones web full-stack en proyectos propios y para clientes.</p>
+          <p>Desde 2025 llevo la caja de un comercio, donde atiendo entre 70 y 100 clientes por día. Ahí veo de primera mano qué necesita un negocio de su sistema: que sea rápido de usar y que los números cierren.</p>
+          <ol class="timeline">
+            <li><time>2026</time><div><strong>Técnico Universitario en Programación</strong><span>UTN, Facultad Regional Reconquista</span></div></li>
+            <li><time>2025 – hoy</time><div><strong>Desarrollador full-stack freelance</strong><span>Sistema de gestión para una peluquería</span></div></li>
+            <li><time>2025 – hoy</time><div><strong>Gestor operativo y de caja</strong><span>Librería y Santa Fe Servicios, Reconquista</span></div></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" aria-labelledby="t-contacto">
+      <div class="contact">
+        <p class="label">Contacto</p>
+        <h2 id="t-contacto">¿Tenés un proyecto? Contame qué necesitás.</h2>
+        <div class="mail">
+          <code id="email">facuferreyrazz3@gmail.com</code>
+          <button class="btn" id="copy-email" type="button">Copiar email</button>
+        </div>
+        <div class="links">
+          <a class="btn" href="https://www.linkedin.com/in/facundo-ferreyra-dev" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="https://github.com/FacuuZ3" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Facundo Ferreyra · Reconquista, Santa Fe, Argentina</footer>
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('copy-email');
+    var email = document.getElementById('email');
+    btn.addEventListener('click', function () {
+      var text = email.textContent.trim();
+      function selectIt() {
+        var r = document.createRange(); r.selectNodeContents(email);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        btn.textContent = 'Seleccionado';
+      }
+      try {
+        navigator.clipboard.writeText(text).then(function () { btn.textContent = 'Copiado'; }, selectIt);
+      } catch (e) { selectIt(); }
+      setTimeout(function () { btn.textContent = 'Copiar email'; }, 2000);
+    });
+  })();
+</script>
+</body>
+</html>
